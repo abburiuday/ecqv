@@ -52,13 +52,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function Login() {
+export default function AdminLogin() {
   const classes = useStyles();
 
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [admin,setAdmin] = useState(false);
   
-  if(loggedIn){
-      return <Redirect to="/landing"/>;
+
+  if(admin){
+    return <Redirect to="/AdminPage" />;
   }
   
 function submitForm (e) {
@@ -66,12 +67,9 @@ function submitForm (e) {
     let userName = e.target.email.value;
     let password = e.target.password.value; 
     
-    if (userName === "A" && password === "B") {
-      setLoggedIn(true);
-      localStorage.setItem('username',userName)
-      localStorage.setItem('password',password)
-      localStorage.setItem('rememberme',loggedIn);
-      console.log(loggedIn);
+    if (userName === "admin" && password === "admin"  ) {
+      setAdmin(true);
+      console.log("Admin Login");
     }
   };
 
@@ -85,7 +83,7 @@ function submitForm (e) {
         
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Admin Sign In
         </Typography>
         <form className={classes.form} onSubmit={submitForm} noValidate>
           <TextField
@@ -111,8 +109,9 @@ function submitForm (e) {
             autoComplete="current-password"
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={<Checkbox  value="remember me" color="primary" />}
             label="Remember me"
+            
           />
           <Button
             type="submit"
@@ -136,10 +135,9 @@ function submitForm (e) {
                 Forgot UserId .?
               </Link>
             </Grid>
-
-            <Grid item >
-              <Link href="/AdminLogin" variant="body2" >
-                Admin Login
+            <Grid item>
+              <Link href="/" variant="body2">
+                User Login
               </Link>
             </Grid>
           </Grid>
