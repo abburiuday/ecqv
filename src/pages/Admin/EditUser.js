@@ -12,7 +12,7 @@ import {
     InputLabel,
     FormControl,
 } from '@material-ui/core';
-import {Get_All_Departments, INSERT_NEW_USER} from '../../data/queries';
+import {Get_All_Departments, Get_User_By_UserId, INSERT_NEW_USER} from '../../data/queries';
 import { useQuery, useMutation } from '@apollo/client'; 
 
 
@@ -39,16 +39,22 @@ const useStyles = makeStyles((theme) => ({
   },
   }));
 
-function AddUser({handleClose,open}) {
+function EditUser({handleClose,open,selectedUser}) {
     const classes = useStyles();
     const [selecteddept, setSelecteddept] = useState(0);
-    const [userdata, setUserData] = useState({firstName:"",lastName:"",Email:"",UserId:"",EmployeeId:""})
+    const [userdata, setUserData] = useState({firstName:"",lastName:"",Email:"",UserId:{selectedUser},EmployeeId:""})
     const { loading, error, data } = useQuery(Get_All_Departments);
     let departments = [];
     if(data){
         console.log("departments");
         departments = data.Department
         console.log(departments);
+    }
+    const { loading1, error1, data1 } = useQuery( Get_User_By_UserId,{variables: { "UserId": {"_eq": selectedUser} }});
+    if(data1){
+        console.log("userprofile");
+        // departments = data.Department
+        console.log(data1.UserProfile);
     }
     const [insertUser] = useMutation(INSERT_NEW_USER);
 
@@ -81,7 +87,7 @@ setSelecteddept(0);
         <Dialog open={open} onClose={handleClose} >
             <DialogContent className={classes.paper}>
                 <Typography variant="h5">
-                    Add User
+                Edit User
                 </Typography>
                 <form className={classes.form} autoComplete="off" noValidate>
                     <Grid container spacing={2}>
@@ -173,7 +179,7 @@ setSelecteddept(0);
     )
 }
 
-export default AddUser
+export default EditUser
 
 
             //                  <Grid Container>

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
-import {Get_All_Users} from '../../data/queries';
+import {Get_Deleted_Users} from '../../data/queries';
 import { useQuery } from '@apollo/client';
 import {
   Button,
@@ -22,30 +22,9 @@ import {
   Tooltip,
   FormControlLabel,
   Switch
-
 } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+// import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-
-// function createData(name, calories, fat, emailid,empid,status,flag) {
-//   return { name, calories, fat, emailid,empid,status,flag};
-// }
-
-// const rows = [
-//   createData('Tesla Motars', 'Elon', 'musk', 'elonusk@gmail.com', 4.3,"completed","pending"),
-//   createData('US President', 'Joe', 'biden', 'president@gmail.com', 4.9,"pending","pending"),
-//   createData('Apple CEO', 'Tim', 'Cook', 'apple@gmail.com', 6.0,"completed","pending"),
-//   createData('Facebook Founder', 'Mark', 'Zugerburg', 'facebook@gmail.com', 4.0,"completed","completed"),
-//   createData('Tata Group', 'Ratan', 'Tata', 'tatagroup@gmail.com', 3.9,"completed","completed"),
-//   createData('Reliance Ind', 'Mukesh', 'Ambani', 'mukeshambani@gmail.com', 6.55,"pending","completed"),
-//   createData('India PM', 'Narendra','Modi', 'narendramodi@gmail.com', 4.3,"pending","completed"),
-//   createData('Adani Group', 'Gowtham', 'Adani', 'adani@gmail.com', 0.0,"completed","completed"),
-//   createData('KitKat', 518, 26.0, 'samplemail@gmail.com', 7.0,"completed","pending"),
-//   createData('Lollipop', 392, 0.2, 'samplemail@gmail.com', 0.0,"pending","pending"),
-//   createData('Marshmallow', 318, 0, 'samplemail@gmail.com', 2.0,"pending","pending"),
-//   createData('Nougat', 360, 19.0, 'samplemail@gmail.com', 37.0,"completed","pending"),
-//   createData('Oreo', 437, 18.0, 'samplemail@gmail.com', 4.0,"pending","completed"),
-// ];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -78,9 +57,8 @@ const headCells = [
   { id: 'FirstName', numeric: false, disablePadding: false, label: 'FirstName' },
   { id: 'LastName', numeric: false, disablePadding: false, label: 'LastName' },
   { id: 'EmailId', numeric: false, disablePadding: false, label: 'Emailid' },
+  { id: 'Department.DepartmentName', numeric: false, disablePadding: false, label: 'Department' },
   { id: 'EmployeeId', numeric: false, disablePadding: false, label: 'Employeeid' },
-  { id: 'ActiveUser', numeric: false, disablePadding: false, label: 'Status' },
-  { id: 'TempPwdFlag', numeric: false, disablePadding: false, label: 'TempFlagStatus' },
 ];
 
 function EnhancedTableHead(props) {
@@ -104,7 +82,7 @@ function EnhancedTableHead(props) {
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : '0 .5rem'}
+            padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
@@ -177,14 +155,15 @@ const EnhancedTableToolbar = (props) => {
       )}
 
       {numSelected ==1 ? (
+
         <Typography style={{display:"flex",margin:"1rem"}}>
-        <Button variant="contained" color="primary">Recover UserId</Button>
-        <Button variant="contained" color="primary">Reset Password</Button>
-        <Button variant="contained" color="primary">Activate/Deactivate User</Button>
-    </Typography>
+            <Button variant="contained" color="primary">Edit</Button>
+            <Button variant="contained" color="primary">Delete</Button>
+        </Typography>
         // <Tooltip title="Delete">
         //   <IconButton aria-label="delete">
-        //     <DeleteIcon />
+        //     <Button variant="contained" color="primary">Edit</Button>
+        //     <Button variant="contained" color="primary">Delete</Button>
         //   </IconButton>
         // </Tooltip>
       ) : (
@@ -226,7 +205,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UserList() {
+export default function RecoverUser() {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('UserId');
@@ -234,7 +213,7 @@ export default function UserList() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const { loading, error, data } = useQuery(Get_All_Users);
+  const { loading, error, data } = useQuery(Get_Deleted_Users);
   let rows=[];
   console.log("defined rows");
   if(data)
@@ -261,6 +240,7 @@ export default function UserList() {
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
+    alert(selected);
     let newSelected = [];
 
     if (selectedIndex === -1) {
@@ -339,16 +319,14 @@ export default function UserList() {
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none ">
+                      <TableCell component="th" id={labelId} scope="row" padding="none">
                         {row.UserId}
                       </TableCell>
-                      <TableCell align="left">{row.FirstName}</TableCell>
+                      <TableCell align="left" >{row.FirstName}</TableCell>
                       <TableCell align="left">{row.LastName}</TableCell>
                       <TableCell align="left">{row.EmailId}</TableCell>
+                      <TableCell align="left">{row.Department.DepartmentName}</TableCell>
                       <TableCell align="left">{row.EmployeeId}</TableCell>
-                      <TableCell align="left">{(row.UserLogin.ActiveUser?'Active':'InActive')}</TableCell>
-                      <TableCell align="left">{(row.UserLogin.TempPwdFlag?'Yes':'No')}</TableCell>
-
                     </TableRow>
                   );
                 })}

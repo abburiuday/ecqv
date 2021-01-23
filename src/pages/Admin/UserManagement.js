@@ -15,6 +15,7 @@ import {
 import UserList from './UserList';
 import AddUser from './AddUser';
 import ModifyLogin from './ModifyLogin';
+import RecoverUser from './RecoverUser';
 
 
 function TabPanel(props) {
@@ -151,7 +152,7 @@ export default function UserManagement() {
               Manage User Role
           </TabPanel>
           <TabPanel value={value} index={3}>
-              Recovery User
+              <RecoverUser/>
           </TabPanel>
         </div>
     </React.Fragment>
