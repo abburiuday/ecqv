@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import {
-  Button,
   Table,
   TableBody,
   TableCell,
@@ -20,28 +19,29 @@ import {
   Tooltip,
   FormControlLabel,
   Switch
+
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
-function createData(name, calories, fat, carbs, protein,empid) {
-  return { name, calories, fat, carbs, protein ,empid};
+function createData(name, calories, fat, emailid,empid,status,flag) {
+  return { name, calories, fat, emailid,empid,status,flag};
 }
 
 const rows = [
-  createData('Cupcake', 305, 3.7, 67, 4.3,5),
-  createData('Donut', 452, 25.0, 51, 4.9,4),
-  createData('Eclair', 262, 16.0, 24, 6.0,3),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0,7),
-  createData('Gingerbread', 356, 16.0, 49, 3.9,6),
-  createData('Honeycomb', 408, 3.2, 87, 6.55,5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3,2),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0,2),
-  createData('KitKat', 518, 26.0, 65, 7.0,7),
-  createData('Lollipop', 392, 0.2, 98, 0.0,3),
-  createData('Marshmallow', 318, 0, 81, 2.0,5),
-  createData('Nougat', 360, 19.0, 9, 37.0,6),
-  createData('Oreo', 437, 18.0, 63, 4.0,8),
+  createData('Tesla Motars', 'Elon', 'musk', 'elonusk@gmail.com', 4.3,"completed","pending"),
+  createData('US President', 'Joe', 'biden', 'president@gmail.com', 4.9,"pending","pending"),
+  createData('Apple CEO', 'Tim', 'Cook', 'apple@gmail.com', 6.0,"completed","pending"),
+  createData('Facebook Founder', 'Mark', 'Zugerburg', 'facebook@gmail.com', 4.0,"completed","completed"),
+  createData('Tata Group', 'Ratan', 'Tata', 'tatagroup@gmail.com', 3.9,"completed","completed"),
+  createData('Reliance Ind', 'Mukesh', 'Ambani', 'mukeshambani@gmail.com', 6.55,"pending","completed"),
+  createData('India PM', 'Narendra','Modi', 'narendramodi@gmail.com', 4.3,"pending","completed"),
+  createData('Adani Group', 'Gowtham', 'Adani', 'adani@gmail.com', 0.0,"completed","completed"),
+  // createData('KitKat', 518, 26.0, 'samplemail@gmail.com', 7.0,"completed","pending"),
+  // createData('Lollipop', 392, 0.2, 'samplemail@gmail.com', 0.0,"pending","pending"),
+  // createData('Marshmallow', 318, 0, 'samplemail@gmail.com', 2.0,"pending","pending"),
+  // createData('Nougat', 360, 19.0, 'samplemail@gmail.com', 37.0,"completed","pending"),
+  // createData('Oreo', 437, 18.0, 'samplemail@gmail.com', 4.0,"pending","completed"),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -71,12 +71,13 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'User id' },
-  { id: 'calories', numeric: true, disablePadding: false, label: 'FirstName' },
-  { id: 'fat', numeric: true, disablePadding: false, label: 'LastName' },
-  { id: 'carbs', numeric: true, disablePadding: false, label: 'Emailid' },
-  { id: 'protein', numeric: true, disablePadding: false, label: 'Departmentid' },
+  { id: 'name', numeric: false, disablePadding: false, label: 'User id' },
+  { id: 'calories', numeric: false, disablePadding: false, label: 'FirstName' },
+  { id: 'fat', numeric: false, disablePadding: false, label: 'LastName' },
+  { id: 'emailid', numeric: false, disablePadding: false, label: 'Emailid' },
   { id: 'empid', numeric: true, disablePadding: false, label: 'Employeeid' },
+  { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
+  { id: 'flag', numeric: false, disablePadding: false, label: 'TempFlagStatus' },
 ];
 
 function EnhancedTableHead(props) {
@@ -100,7 +101,7 @@ function EnhancedTableHead(props) {
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'default'}
+            padding={headCell.disablePadding ? 'none' : '0 .5rem'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
@@ -173,17 +174,11 @@ const EnhancedTableToolbar = (props) => {
       )}
 
       {numSelected > 0 ? (
-
-        <Typography style={{display:"flex",margin:"1rem"}}>
-            <Button variant="contained" color="primary">Edit</Button>
-            <Button variant="contained" color="primary">Delete</Button>
-        </Typography>
-        // <Tooltip title="Delete">
-        //   <IconButton aria-label="delete">
-        //     <Button variant="contained" color="primary">Edit</Button>
-        //     <Button variant="contained" color="primary">Delete</Button>
-        //   </IconButton>
-        // </Tooltip>
+        <Tooltip title="Delete">
+          <IconButton aria-label="delete">
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
       ) : (
         <Tooltip title="Filter list">
           <IconButton aria-label="filter list">
@@ -327,14 +322,16 @@ export default function UserList() {
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
+                      <TableCell component="th" id={labelId} scope="row" padding="none ">
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="left">{row.calories}</TableCell>
+                      <TableCell align="left">{row.fat}</TableCell>
+                      <TableCell align="left">{row.emailid}</TableCell>
                       <TableCell align="right">{row.empid}</TableCell>
+                      <TableCell align="left">{row.status}</TableCell>
+                      <TableCell align="left">{row.flag}</TableCell>
+
                     </TableRow>
                   );
                 })}

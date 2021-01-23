@@ -6,10 +6,6 @@ import {
   Button,
   Breadcrumbs,
   Link,
-  FormControl,
-  InputLabel,
-  Select,
-  Paper,
   Tabs,
   Tab,
   Typography,
@@ -17,7 +13,8 @@ import {
   TextField,
    } from '@material-ui/core';
 import UserList from './UserList';
-import AddUser from './AddUser'
+import AddUser from './AddUser';
+import ModifyLogin from './ModifyLogin';
 
 
 function TabPanel(props) {
@@ -100,11 +97,6 @@ export default function UserManagement() {
               </Link>
               <Typography color="textPrimary">User Management</Typography>
             </Breadcrumbs>
-            <Button color="primary" variant="contained" onClick={handleClickOpen}> Add user</Button>
-            
-            {/* Adding User to the list */}
-            
-            <AddUser open={open} handleClose={handleClose} />
         </div>
 
         <div className={classes.root}>
@@ -126,9 +118,9 @@ export default function UserManagement() {
           </AppBar>
 
           <TabPanel value={value} index={0}>
-              <div style={{display:"flex",justifyContent:"space-between",padding:"0rem 2rem"}}>
+              <div style={{display:"flex",justifyContent:"space-between",padding:"0rem 0.5rem", marginBottom :"1.5rem"}}>
                 <TextField id="outlined-search" label="Search field" type="search" variant="outlined" />
-                <FormControl variant="outlined" className={classes.formControl}>
+                {/* <FormControl variant="outlined" className={classes.formControl}>
                   <InputLabel htmlFor="outlined-age-native-simple">Sort By</InputLabel>
                   <Select
                     native
@@ -144,12 +136,16 @@ export default function UserManagement() {
                     <option value={20}>Last one Month</option>
                     <option value={30}>Last one Year</option>
                   </Select>
-                </FormControl>
+                </FormControl> */}
+                
+                <Button color="primary" variant="contained" onClick={handleClickOpen}> Add user</Button>
+                {/* Adding User to the list */} 
+                <AddUser open={open} handleClose={handleClose} />
               </div>
               <UserList />
           </TabPanel>
           <TabPanel value={value} index={1}>
-               Modify Login
+              <ModifyLogin />
           </TabPanel>
           <TabPanel value={value} index={2}>
               Manage User Role
