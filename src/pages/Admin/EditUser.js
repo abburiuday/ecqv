@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 function EditUser({handleClose,open,selectedUser}) {
     const classes = useStyles();
     const [selecteddept, setSelecteddept] = useState(0);
-    const [userdata, setUserData] = useState({firstName:"",lastName:"",Email:"",UserId:{selectedUser},EmployeeId:""})
+    const [userdata, setUserData] = useState({firstName:"",lastName:"",Email:"",UserId:selectedUser,EmployeeId:""})
     const { loading, error, data } = useQuery(Get_All_Departments);
     let departments = [];
     if(data){
@@ -53,7 +53,7 @@ function EditUser({handleClose,open,selectedUser}) {
     const { loading1, error1, data1 } = useQuery( Get_User_By_UserId,{variables: { "UserId": {"_eq": selectedUser} }});
     if(data1){
         console.log("userprofile");
-        // departments = data.Department
+        setUserData({...userdata, firstName: data1.UserProfile.FirstName})
         console.log(data1.UserProfile);
     }
     const [insertUser] = useMutation(INSERT_NEW_USER);
